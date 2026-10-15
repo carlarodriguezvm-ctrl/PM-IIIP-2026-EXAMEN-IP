@@ -1,0 +1,61 @@
+# ==============================================================================
+# GUÍA PASO A PASO MULTIPLATAFORMA PARA EXAMEN (WINDOWS Y UBUNTU/WSL)
+# Entorno de comandos: Bash (Git Bash en Windows / Terminal en Ubuntu/WSL)
+# ==============================================================================
+
+
+# ==============================================================================
+# SECCIÓN 1: PROCEDIMIENTO PARA WINDOWS (Usando Git Bash)
+# ==============================================================================
+
+# PASO 1.1: Crear el entorno virtual (.venv)
+python -m venv .venv
+
+# PASO 1.2: Activar el entorno virtual en Git Bash
+source .venv/Scripts/activate
+
+# PASO 1.3: Actualizar pip e instalar librerías necesarias
+python -m pip install --upgrade pip
+pip install ttkbootstrap pyinstaller pillow
+
+# PASO 1.4: Generar el archivo ejecutable (.exe) para Windows
+# Nota: En Windows, PyInstaller genera un archivo con extensión .exe automáticamente.
+pyinstaller --clean --noconsole --onefile \
+  --hidden-import="PIL._tkinter_finder" \
+  --collect-data="ttkbootstrap" \
+  --collect-all="PIL" \
+  --name="nombre_ejecutable" main.py
+
+# PASO 1.5: Ubicación del resultado en Windows
+# Tu archivo ejecutable estará listo en la carpeta: /dist/nombre_ejecutable.exe
+
+
+# ==============================================================================
+# SECCIÓN 2: PROCEDIMIENTO PARA UBUNTU / WSL
+# ==============================================================================
+
+# PASO 2.1: Instalar dependencias previas del sistema (Obligatorio en Linux)
+sudo apt update && sudo apt install python3-tk python3-venv -y
+
+# PASO 2.2: Crear el entorno virtual (.venv)
+python3 -m venv .venv
+
+# PASO 2.3: Activar el entorno virtual en Ubuntu/WSL
+source .venv/bin/activate
+
+# PASO 2.4: Actualizar pip e instalar librerías necesarias
+python -m pip install --upgrade pip
+pip install ttkbootstrap pyinstaller pillow
+
+# PASO 2.5: Generar el archivo ejecutable nativo para Linux
+# Nota: En Linux, el binario resultante no lleva extensión .exe.
+pyinstaller --clean --noconsole --onefile \
+  --hidden-import="PIL._tkinter_finder" \
+  --collect-data="ttkbootstrap" \
+  --collect-all="PIL" \
+  --name="nombre_ejecutable" main.py
+
+# PASO 2.6: Dar permisos y ejecutar el binario en Linux/WSL
+cd dist
+chmod +x nombre_ejecutable
+./nombre_ejecutable
